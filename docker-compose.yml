@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: f1hub-postgres
+    environment:
+      POSTGRES_DB: f1hub
+      POSTGRES_USER: f1hub_user
+      POSTGRES_PASSWORD: f1hub_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: f1hub-redis
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: .
+    container_name: f1hub-backend
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/f1hub
+      SPRING_DATASOURCE_USERNAME: f1hub_user
+      SPRING_DATASOURCE_PASSWORD: f1hub_pass
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
