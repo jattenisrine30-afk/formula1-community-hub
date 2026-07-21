@@ -1,4 +1,4 @@
-name: CI - Build and Test
+name: CI - Build, Test and Security Scan
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ main, develop ]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,8 +20,45 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Build avec Maven
-        run: mvn clean package -DskipTests
+      - name: Compiler le projet
+        run: mvn clean compile
+
+      - name: Exécuter les tests
+        run: mvn test
+
+      - name: Construire le package
+        run: mvn package -DskipTests
 
       - name: Construire l'image Docker
         run: docker build -t f1-community-hub-backend .
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Analyse statique du code (Semgrep)
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: auto
+        continue-on-error: true
+
+      - name: Détection de secrets (Gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Reconstruire l'image pour le scan
+        run: docker build -t f1-community-hub-backend .
+
+      - name: Scan de l'image Docker (Trivy)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'f1-community-hub-backend'
+          format: 'table'
+          severity: 'CRITICAL,HIGH'
+        continue-on-error: true
