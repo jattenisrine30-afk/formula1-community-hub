@@ -9,6 +9,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
 
     services:
       postgres:
@@ -55,6 +58,9 @@ jobs:
   security-scan:
     runs-on: ubuntu-latest
     needs: build-and-test
+    defaults:
+      run:
+        working-directory: ./backend
 
     steps:
       - name: Checkout du code
@@ -87,6 +93,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: security-scan
     if: github.ref == 'refs/heads/main'
+    defaults:
+      run:
+        working-directory: ./backend
 
     steps:
       - name: Checkout du code
@@ -101,6 +110,6 @@ jobs:
       - name: Construire et pousser l'image
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ./backend
           push: true
           tags: ${{ secrets.DOCKERHUB_NISRINEJATTE }}/f1-community-hub-backend:latest
