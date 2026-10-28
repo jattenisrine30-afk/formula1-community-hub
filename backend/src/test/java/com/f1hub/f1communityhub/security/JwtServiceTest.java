@@ -11,7 +11,7 @@ class JwtServiceTest {
 
     @BeforeEach
     void setUp() {
-        jwtService = new JwtService();
+        jwtService = new JwtService("cle-de-test-uniquement-assez-longue-pour-hmac-256-bits", 86400000L);
     }
 
     @Test

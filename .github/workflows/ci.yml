@@ -46,8 +46,12 @@ jobs:
       - name: Compiler le projet
         run: mvn clean compile
 
+
       - name: Exécuter les tests
         run: mvn test
+        env:
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+
 
       - name: Construire le package
         run: mvn package -DskipTests
