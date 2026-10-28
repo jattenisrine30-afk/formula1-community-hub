@@ -29,6 +29,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: f1hub_pass
       SPRING_DATA_REDIS_HOST: redis
       SPRING_DATA_REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET manquant dans le fichier .env}
     ports:
       - "8080:8080"
 
