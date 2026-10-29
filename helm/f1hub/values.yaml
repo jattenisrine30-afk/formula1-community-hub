@@ -1,0 +1,21 @@
+secretName: f1hub-secrets
+
+config:
+  datasourceUrl: "jdbc:postgresql://postgres:5432/f1hub"
+  redisHost: "redis"
+  redisPort: "6379"
+
+backend:
+  replicas: 1
+  port: 8080
+  image:
+    repository: nisrine2002/f1-community-hub-backend
+    tag: latest
+    pullPolicy: Always
+
+postgres:
+  image: postgres:16
+  storage: 1Gi
+
+redis:
+  image: redis:7
