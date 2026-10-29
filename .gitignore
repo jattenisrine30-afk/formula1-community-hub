@@ -31,4 +31,13 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Secrets locaux (ne jamais versionner) ###
 .env
+
+### Terraform ###
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
