@@ -19,3 +19,6 @@ postgres:
 
 redis:
   image: redis:7
+
+monitoring:
+  enabled: false
