@@ -1,0 +1,36 @@
+# Valeurs allégées pour un usage local sur minikube.
+# Aucun mot de passe ici : le mot de passe Grafana est généré par le chart
+# et se lit dans un Secret Kubernetes.
+prometheus:
+  prometheusSpec:
+    retention: 2d
+    # Prend en compte les ServiceMonitor de tous les namespaces
+    serviceMonitorSelectorNilUsesHelmValues: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 400Mi
+
+alertmanager:
+  alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 25m
+        memory: 64Mi
+
+grafana:
+  defaultDashboardsTimezone: Africa/Casablanca
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+# Composants du plan de contrôle non accessibles dans minikube
+kubeEtcd:
+  enabled: false
+kubeScheduler:
+  enabled: false
+kubeControllerManager:
+  enabled: false
+kubeProxy:
+  enabled: false
