@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/f1/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/posts").permitAll()
+                        .requestMatchers("/actuator/prometheus").permitAll()
                         .anyRequest().authenticated()
 
                 )
